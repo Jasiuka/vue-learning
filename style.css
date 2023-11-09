@@ -1,0 +1,57 @@
+.changed {
+  color: green;
+}
+
+#app {
+  width: 20dvw;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.item {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.subtext {
+  display: none;
+  padding: 20px;
+}
+
+.active {
+  display: inline-block;
+}
+
+/* TODO */
+
+#todo {
+  overflow: hidden;
+}
+
+.ul {
+  list-style: none;
+}
+
+.new-tag-form {
+  transform: translateX(-200px);
+  transition: all 0.3s ease;
+  animation: slideIn ease 0.3s forwards;
+}
+
+@keyframes slideIn {
+  40% {
+    transform: translateX(-100px);
+  }
+
+  80% {
+    transform: translateX(10px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
