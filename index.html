@@ -13,8 +13,8 @@
       <h1>Todo list app</h1>
       <label>Write your todo!</label>
       <input v-model="inputValue"/>
-      <select>
-        <option>Select tag</option>
+      <select v-model="selected">
+        <option disabled value="">Select tag</option>
         <option v-for="tag in tags">{{tag}}</option>
       </select>
       <button v-on:click="addTodo">Add todo</button>
@@ -26,9 +26,18 @@
           <button type="submit">Create</button>
         </form>
       </div>
+      <div class="filter">
+        <h3>Filter by tag:</h3>
+        <div>
+          <button class="filter-button" v-bind:class="{'filter-button-active': turnActive(index)}" v-on:click="activateFilterButton(index)" v-bind:style="{backgroundColor: filterButtonColors[index]}" :key="index" v-for="(tag,index) in tags">#{{tag}}</button>
+        </div>
+      </div>
       <ul class="ul">
         <li class="li">
-          <p v-for="(todo,index) in todos" :key="index">{{todo.text}}</p>
+          <div class="todo-item" v-for="(todo,index) in filteredTodos()" :key="index">
+            <p>{{todo.text}}</p>
+            <p class="todo-tag" v-bind:style="{backgroundColor: filterButtonColors[todo.tagId]}">#{{todo.tag}}</p>
+          </div>
         </li>
       </ul>
     </div>

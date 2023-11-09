@@ -89,17 +89,39 @@ const todo = new Vue({
   data: {
     todos: [],
     tags: ["FOOD", "GAMING"],
+    activeFilters: [],
     inputValue: "",
     tagInput: "",
     newTagInput: "",
     isNewTagOpen: false,
+    selected: "",
+    styleObject: {},
+    filterButtonColors: [],
+  },
+  created() {
+    this.filterButtonColors = this.generateRandomColors();
   },
   methods: {
     addTodo: function () {
+      if (!this.selected) {
+        alert("Select tag!");
+        return;
+      }
+      if (this.inputValue < 4) {
+        alert("Todo should be longer!");
+        return;
+      }
+      console.log(this.todos);
       const todo = {
         text: this.inputValue,
+        tag: this.selected,
+        id: this.todos.length,
+        tagId: this.tags.indexOf(this.selected),
       };
+
+      console.log(todo);
       this.todos.push(todo);
+      this.inputValue = "";
     },
     createTag: function () {
       if (this.newTagInput.length < 3) {
@@ -111,6 +133,39 @@ const todo = new Vue({
     },
     openNewTagForm: function () {
       this.isNewTagOpen = !this.isNewTagOpen;
+    },
+    generateRandomColors: function () {
+      return this.tags.map(() => this.generateRandomColor());
+    },
+    generateRandomColor: function () {
+      const red = Math.floor(Math.random() * 256);
+      const green = Math.floor(Math.random() * 256);
+      const blue = Math.floor(Math.random() * 256);
+
+      const color = `rgb(${red}, ${green}, ${blue})`;
+
+      return color;
+    },
+    activateFilterButton: function (buttonId) {
+      if (this.activeFilters.includes(buttonId)) {
+        this.activeFilters = [
+          ...this.activeFilters.filter(
+            (activeFilter) => activeFilter !== buttonId
+          ),
+        ];
+        return;
+      }
+      this.activeFilters.push(buttonId);
+    },
+    filteredTodos: function () {
+      return this.todos.filter(
+        (todo) =>
+          this.activeFilters.length === 0 ||
+          this.activeFilters.includes(todo.tagId)
+      );
+    },
+    turnActive: function (buttonId) {
+      return this.activeFilters.includes(buttonId);
     },
   },
 });
