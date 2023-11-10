@@ -10,14 +10,14 @@
   </head>
   <body>
     <div id="todo">
-      <h1>Todo list app</h1>
-      <label>Write your todo!</label>
-      <input v-model="inputValue"/>
-      <select v-model="selected">
-        <option disabled value="">Select tag</option>
-        <option v-for="tag in tags">{{tag}}</option>
-      </select>
-      <button v-on:click="addTodo">Add todo</button>
+      <div class="todo-inner">
+        <form @submit.prevent="addTodo">
+          <div class="todo-add-input">
+            <input placeholder="E.g.. Buy GTA 5" v-model="inputValue"/>
+            <button type="submit">Add todo</button>
+          </div>
+          <custom-select v-bind:tags="tags"></custom-select>
+        </form>
       <div>
         <button v-on:click="openNewTagForm">Create new tag</button>
         <form class="new-tag-form" v-on:submit.prevent="createTag" v-if="isNewTagOpen">
@@ -29,7 +29,7 @@
       <div class="filter">
         <h3>Filter by tag:</h3>
         <div>
-          <button class="filter-button" v-bind:class="{'filter-button-active': turnActive(index)}" v-on:click="activateFilterButton(index)" v-bind:style="{backgroundColor: filterButtonColors[index]}" :key="index" v-for="(tag,index) in tags">#{{tag}}</button>
+          <button class="filter-button" v-bind:class="{'filter-button-active': turnActive(tagId)}" v-on:click="activateFilterButton(tagId)" v-bind:style="{backgroundColor: filterButtonColors[tagId]}" :key="tagId" v-for="{tagId,tagText} in tags">#{{tagText}}</button>
         </div>
       </div>
       <ul class="ul">
@@ -41,7 +41,9 @@
         </li>
       </ul>
     </div>
-    <div id="app">
+
+    </div>
+    <!-- <div id="app">
       <h1>Accordion</h1>
       <div class="item" v-for="(text,index) in items" :key="index">
         <div class="wrapper">
@@ -53,6 +55,6 @@
         </div>
         <p class="subtext" v-bind:class="{active: currentOpen === index}">{{text.subtext}}</p>
       </div>
-    </div>
+    </div> -->
   </body>
 </html>

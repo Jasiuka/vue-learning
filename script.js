@@ -84,11 +84,30 @@
 //   },
 // });
 
+Vue.component("custom-select", {
+  data: function () {
+    return {
+      selected: "Select tag",
+    };
+  },
+  props: ["tags"],
+  methods: {
+    selectTag: function (tagId) {
+      console.log(tagId);
+    },
+  },
+  template:
+    '<div class="custom-select"><h3>{{selected.text}}</h3><div class="custom-select-option" v-for="{tagId,tagText} in tags"> <input v-model="selected" type="radio" id="tagText" name="custom-select" :value="{id: tagId, text: tagText}"/> <label for="tagText">{{tagText}}</label> </div></div>',
+});
+
 const todo = new Vue({
   el: "#todo",
   data: {
     todos: [],
-    tags: ["FOOD", "GAMING"],
+    tags: [
+      { tagId: 0, tagText: "FOOD" },
+      { tagId: 1, tagText: "GAMING" },
+    ],
     activeFilters: [],
     inputValue: "",
     tagInput: "",
@@ -129,6 +148,10 @@ const todo = new Vue({
         return;
       }
       this.tags.push(this.newTagInput.toUpperCase());
+      this.filterButtonColors = [
+        ...this.filterButtonColors,
+        this.generateRandomColor(),
+      ];
       this.newTagInput = "";
     },
     openNewTagForm: function () {

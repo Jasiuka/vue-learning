@@ -1,4 +1,15 @@
-.changed {
+:root {
+  --lightest-green: #def4c6;
+  --light-green: #73e2a7;
+  --dark-green: #1c7c54;
+  --darkest-green: #1b512d;
+  --border-radius: 5px;
+  --tr-03-ease: all 0.3s ease;
+  --black: #343a40;
+  --grey: #e9ecef;
+}
+
+/* .changed {
   color: green;
 }
 
@@ -24,12 +35,65 @@
 
 .active {
   display: inline-block;
-}
+} */
 
 /* TODO */
 
+body {
+  background-color: var(--grey);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 95dvh;
+  color: var(--black);
+}
+
 #todo {
   overflow: hidden;
+  border-radius: var(--border-radius);
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  border: double 2px var(--darkest-green);
+}
+
+.todo-add-input {
+  display: flex;
+}
+
+.todo-add-input input {
+  font-size: 24px;
+  padding: 10px 16px;
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  border: none;
+  outline: none;
+  transition: var(--tr-03-ease);
+}
+
+.todo-add-input input:focus {
+  background-color: var(--light-green);
+}
+
+.todo-add-input button {
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  border: none;
+  background-color: var(--light-green);
+  cursor: pointer;
+  transition: var(--tr-03-ease);
+  color: inherit;
+  font-weight: 600;
+}
+
+.todo-add-input button:hover {
+  background-color: var(--lightest-green);
+}
+
+.todo-tag-select {
+  width: 100%;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  padding: 6px;
 }
 
 .ul {
@@ -57,11 +121,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid transparent;
+  border: 3px solid transparent;
 }
 
 .filter-button-active {
-  animation: changeBorderColors 1s ease infinite;
+  animation: changeBorderColors 3s ease infinite;
 }
 
 .filter-button:hover {
@@ -100,18 +164,18 @@
   40%,
   70%,
   100% {
-    border: 2px solid red;
+    border: 3px solid black;
   }
 
   20%,
   50%,
   80% {
-    border: 2px solid green;
+    border: 3px solid white;
   }
 
   30%,
   60%,
   90% {
-    border: 2px solid blue;
+    border: 3px solid black;
   }
 }
