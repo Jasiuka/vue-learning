@@ -13,7 +13,13 @@
   </head>
   <body>
     <div id="todo">
-      <div class="todo-inner">
+      <nav class="nav">
+        <button v-bind:class="{'tab-button-active': isHome}" class="tab-button" @click="changeTab(true)">Home</button>
+        <button v-bind:class="{'tab-button-active': !isHome}" class="tab-button"  @click="changeTab(false)">Tags</button>
+      </nav>
+      <div class="todo-inner" >
+        <div v-if="isHome" class="todo-todos">
+
         <form @submit.prevent="addTodo">
           <div class="todo-add-input">
             <input placeholder="E.g.. Buy GTA 5" v-model="inputValue"/>
@@ -21,14 +27,6 @@
           </div>
           <custom-select @tag-selected="updateSelected" v-bind:tags="tags"></custom-select>
         </form>
-      <div>
-        <button v-on:click="openNewTagForm">Create new tag</button>
-        <form class="new-tag-form" v-on:submit.prevent="createTag" v-if="isNewTagOpen">
-          <label for="new-tag">Tag</label>
-          <input id="new-tag" placeholder="E.g car.." v-model="newTagInput"/>
-          <button type="submit">Create</button>
-        </form>
-      </div>
       <div class="filter">
         <h3>Filter by tag:</h3>
         <div>
@@ -36,14 +34,21 @@
         </div>
       </div>
       <ul class="ul">
-        <li class="li">
-          <div class="todo-item" v-for="(todo,index) in filteredTodos()" :key="index">
+        <li class="todo-item" v-for="(todo,index) in filteredTodos()" :key="index">
             <p>{{todo.text}}</p>
             <p class="todo-tag" v-bind:style="{backgroundColor: filterButtonColors[todo.tag.tagId]}">#{{todo.tag.tagText}}</p>
-          </div>
         </li>
       </ul>
     </div>
+    <div class="todo-tags" v-else >
+      <button v-on:click="openNewTagForm">Create new tag</button>
+      <form class="new-tag-form" v-on:submit.prevent="createTag" v-if="isNewTagOpen">
+        <label for="new-tag">Tag</label>
+        <input id="new-tag" placeholder="E.g car.." v-model="newTagInput"/>
+        <button type="submit">Create</button>
+      </form>
+    </div>
+  </div>
 
     </div>
     <!-- <div id="app">

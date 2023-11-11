@@ -89,6 +89,7 @@ Vue.component("custom-select", {
     return {
       selected: { text: "Select tag", id: -1 },
       isOptionsOpen: false,
+      isScrollNeeded: false,
     };
   },
   props: ["tags"],
@@ -110,7 +111,7 @@ Vue.component("custom-select", {
         <span>{{selected?.text}}</span>
         <span class="custom-select-icon" :key="this.isOptionsOpen ? 'icon-open' : 'icon-closed'">{{this.isOptionsOpen ? "-":"+"}}</span>
       </h3>
-      <div class="custom-select-options" v-bind:class="{ \'custom-select-options__open\': isOptionsOpen}">
+      <div class="custom-select-options" v-bind:class="{ \'custom-select-options__open\': isOptionsOpen, \'custom-select-options__scroll':tags.length > 3}">
         <div class="custom-select-option" v-for="{tagId,tagText} in tags">
           <input v-on:change="selectTag(tagId,tagText)"  class="custom-select-radio" type="radio" v-bind:id="tagText" name="custom-select" s/>
           <label class="custom-select-label" v-bind:for="tagText">{{tagText}}</label>
@@ -141,6 +142,7 @@ const todo = new Vue({
     selected: "",
     styleObject: {},
     filterButtonColors: [],
+    isHome: true,
   },
   created() {
     this.filterButtonColors = this.generateRandomColors();
@@ -218,6 +220,9 @@ const todo = new Vue({
     },
     updateSelected: function (selectedTag) {
       this.selected = selectedTag;
+    },
+    changeTab: function (value) {
+      this.isHome = value;
     },
   },
 });
