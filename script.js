@@ -87,18 +87,43 @@
 Vue.component("custom-select", {
   data: function () {
     return {
-      selected: "Select tag",
+      selected: { text: "Select tag", id: -1 },
+      isOptionsOpen: false,
     };
   },
   props: ["tags"],
   methods: {
-    selectTag: function (tagId) {
-      console.log(tagId);
+    selectTag: function (tagId, tagText) {
+      this.selected = { id: tagId, text: tagText };
+      this.$emit("tag-selected", {
+        tagText: this.selected.text,
+        tagId: this.selected.id,
+      });
+      this.isOptionsOpen = false;
+    },
+    toggleOptions: function () {
+      this.isOptionsOpen = !this.isOptionsOpen;
     },
   },
-  template:
-    '<div class="custom-select"><h3>{{selected.text}}</h3><div class="custom-select-option" v-for="{tagId,tagText} in tags"> <input v-model="selected" type="radio" id="tagText" name="custom-select" :value="{id: tagId, text: tagText}"/> <label for="tagText">{{tagText}}</label> </div></div>',
+  template: `<div class="custom-select">
+      <h3  class="custom-select-display" v-bind:class="{'custom-select-display-selected': selected.id !== -1}" v-on:click="toggleOptions">
+        <span>{{selected?.text}}</span>
+        <span class="custom-select-icon" :key="this.isOptionsOpen ? 'icon-open' : 'icon-closed'">{{this.isOptionsOpen ? "-":"+"}}</span>
+      </h3>
+      <div class="custom-select-options" v-bind:class="{ \'custom-select-options__open\': isOptionsOpen}">
+        <div class="custom-select-option" v-for="{tagId,tagText} in tags">
+          <input v-on:change="selectTag(tagId,tagText)"  class="custom-select-radio" type="radio" v-bind:id="tagText" name="custom-select" s/>
+          <label class="custom-select-label" v-bind:for="tagText">{{tagText}}</label>
+        </div>
+      </div>
+    </div>`,
 });
+
+const getTagIdFromTags = (tags, selected) => {
+  return tags.find((tag) => {
+    if (tag.tagText === selected) return tag.tagId;
+  });
+};
 
 const todo = new Vue({
   el: "#todo",
@@ -130,15 +155,13 @@ const todo = new Vue({
         alert("Todo should be longer!");
         return;
       }
-      console.log(this.todos);
+
       const todo = {
         text: this.inputValue,
-        tag: this.selected,
+        tag: { tagId: this.selected.tagId, tagText: this.selected.tagText },
         id: this.todos.length,
-        tagId: this.tags.indexOf(this.selected),
       };
 
-      console.log(todo);
       this.todos.push(todo);
       this.inputValue = "";
     },
@@ -147,7 +170,10 @@ const todo = new Vue({
         alert("Tag should be longer!");
         return;
       }
-      this.tags.push(this.newTagInput.toUpperCase());
+      this.tags.push({
+        tagId: this.tags.length,
+        tagText: this.newTagInput.toUpperCase(),
+      });
       this.filterButtonColors = [
         ...this.filterButtonColors,
         this.generateRandomColor(),
@@ -184,11 +210,14 @@ const todo = new Vue({
       return this.todos.filter(
         (todo) =>
           this.activeFilters.length === 0 ||
-          this.activeFilters.includes(todo.tagId)
+          this.activeFilters.includes(todo.tag.tagId)
       );
     },
     turnActive: function (buttonId) {
       return this.activeFilters.includes(buttonId);
+    },
+    updateSelected: function (selectedTag) {
+      this.selected = selectedTag;
     },
   },
 });

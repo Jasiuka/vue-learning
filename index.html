@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script defer src="/script.js"></script>
     <link rel="stylesheet" href="style.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <title>Vue</title>
   </head>
@@ -16,7 +19,7 @@
             <input placeholder="E.g.. Buy GTA 5" v-model="inputValue"/>
             <button type="submit">Add todo</button>
           </div>
-          <custom-select v-bind:tags="tags"></custom-select>
+          <custom-select @tag-selected="updateSelected" v-bind:tags="tags"></custom-select>
         </form>
       <div>
         <button v-on:click="openNewTagForm">Create new tag</button>
@@ -36,7 +39,7 @@
         <li class="li">
           <div class="todo-item" v-for="(todo,index) in filteredTodos()" :key="index">
             <p>{{todo.text}}</p>
-            <p class="todo-tag" v-bind:style="{backgroundColor: filterButtonColors[todo.tagId]}">#{{todo.tag}}</p>
+            <p class="todo-tag" v-bind:style="{backgroundColor: filterButtonColors[todo.tag.tagId]}">#{{todo.tag.tagText}}</p>
           </div>
         </li>
       </ul>

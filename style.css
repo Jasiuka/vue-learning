@@ -7,6 +7,7 @@
   --tr-03-ease: all 0.3s ease;
   --black: #343a40;
   --grey: #e9ecef;
+  --white: #fff;
 }
 
 /* .changed {
@@ -39,6 +40,14 @@
 
 /* TODO */
 
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   background-color: var(--grey);
   display: flex;
@@ -46,6 +55,7 @@ body {
   justify-content: center;
   height: 95dvh;
   color: var(--black);
+  font-family: "Roboto Condensed", "sans serif";
 }
 
 #todo {
@@ -55,7 +65,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  padding: 25px;
   border: double 2px var(--darkest-green);
 }
 
@@ -78,8 +88,9 @@ body {
 
 .todo-add-input button {
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  padding: 0 4px;
   border: none;
-  background-color: var(--light-green);
+  background-color: var(--white);
   cursor: pointer;
   transition: var(--tr-03-ease);
   color: inherit;
@@ -87,13 +98,61 @@ body {
 }
 
 .todo-add-input button:hover {
-  background-color: var(--lightest-green);
+  background-color: var(--light-green);
+}
+
+.custom-select {
+  margin-top: 4px;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .todo-tag-select {
   width: 100%;
   border-radius: 0 0 var(--border-radius) var(--border-radius);
   padding: 6px;
+}
+
+.custom-select-options {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+
+.custom-select-options__open {
+  height: 6rem;
+}
+.custom-select-radio {
+  display: none;
+}
+
+.custom-select-label {
+  cursor: pointer;
+  display: block;
+  padding: 6px;
+  transition: var(--tr-03-ease);
+}
+
+.custom-select-label:hover {
+  background-color: var(--light-green);
+}
+
+.custom-select-display {
+  cursor: pointer;
+  padding: 6px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+}
+
+.custom-select-display-selected {
+  background-color: var(--light-green);
+}
+
+.custom-select-icon {
+  animation: spinIcon 0.3s ease;
 }
 
 .ul {
@@ -156,6 +215,12 @@ body {
 
   100% {
     transform: translateX(0);
+  }
+}
+
+@keyframes spinIcon {
+  100% {
+    rotate: 360deg;
   }
 }
 
