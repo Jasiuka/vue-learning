@@ -107,17 +107,17 @@ Vue.component("custom-select", {
     },
   },
   template: `<div class="custom-select">
-      <h3  class="custom-select-display" v-bind:class="{'custom-select-display-selected': selected.id !== -1}" v-on:click="toggleOptions">
-        <span>{{selected?.text}}</span>
-        <span class="custom-select-icon" :key="this.isOptionsOpen ? 'icon-open' : 'icon-closed'">{{this.isOptionsOpen ? "-":"+"}}</span>
-      </h3>
-      <div class="custom-select-options" v-bind:class="{ \'custom-select-options__open\': isOptionsOpen, \'custom-select-options__scroll':tags.length > 3}">
-        <div class="custom-select-option" v-for="{tagId,tagText} in tags">
-          <input v-on:change="selectTag(tagId,tagText)"  class="custom-select-radio" type="radio" v-bind:id="tagText" name="custom-select" s/>
-          <label class="custom-select-label" v-bind:for="tagText">{{tagText}}</label>
+        <h3  class="custom-select-display" v-bind:class="{'custom-select-display-selected': selected.id !== -1}" v-on:click="toggleOptions">
+          <span>{{selected?.text}}</span>
+          <span class="custom-select-icon" :key="this.isOptionsOpen ? 'icon-open' : 'icon-closed'">{{this.isOptionsOpen ? "-":"+"}}</span>
+        </h3>
+        <div class="custom-select-options" v-bind:class="{ \'custom-select-options__open\': isOptionsOpen, \'custom-select-options__scroll':tags.length > 3}">
+          <div class="custom-select-option" v-for="{tagId,tagText} in tags">
+            <input v-on:change="selectTag(tagId,tagText)"  class="custom-select-radio" type="radio" v-bind:id="tagText" name="custom-select" s/>
+            <label class="custom-select-label" v-bind:for="tagText">{{tagText}}</label>
+          </div>
         </div>
-      </div>
-    </div>`,
+      </div>`,
 });
 
 const getTagIdFromTags = (tags, selected) => {
@@ -143,6 +143,7 @@ const todo = new Vue({
     styleObject: {},
     filterButtonColors: [],
     isHome: true,
+    isCreateTagOpen: false,
   },
   created() {
     this.filterButtonColors = this.generateRandomColors();
@@ -184,6 +185,7 @@ const todo = new Vue({
     },
     openNewTagForm: function () {
       this.isNewTagOpen = !this.isNewTagOpen;
+      this.isCreateTagOpen = !this.isCreateTagOpen;
     },
     generateRandomColors: function () {
       return this.tags.map(() => this.generateRandomColor());

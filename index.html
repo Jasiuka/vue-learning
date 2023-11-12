@@ -27,7 +27,7 @@
           </div>
           <custom-select @tag-selected="updateSelected" v-bind:tags="tags"></custom-select>
         </form>
-      <div class="filter">
+      <div v-if="todos.length > 0" class="filter">
         <h3>Filter by tag:</h3>
         <div>
           <button class="filter-button" v-bind:class="{'filter-button-active': turnActive(tagId)}" v-on:click="activateFilterButton(tagId)" v-bind:style="{backgroundColor: filterButtonColors[tagId]}" :key="tagId" v-for="{tagId,tagText} in tags">#{{tagText}}</button>
@@ -41,11 +41,12 @@
       </ul>
     </div>
     <div class="todo-tags" v-else >
-      <button v-on:click="openNewTagForm">Create new tag</button>
-      <form class="new-tag-form" v-on:submit.prevent="createTag" v-if="isNewTagOpen">
-        <label for="new-tag">Tag</label>
-        <input id="new-tag" placeholder="E.g car.." v-model="newTagInput"/>
-        <button type="submit">Create</button>
+      <button v-bind:class="{'create-new-open':isCreateTagOpen}" class="btn-default btn-create-new" v-on:click="openNewTagForm">Create new tag</button>
+      <transition name="slide">
+        <form  class="new-tag-form" v-on:submit.prevent="createTag" v-if="isNewTagOpen">
+          <input class="new-tag-form__input" id="new-tag" placeholder="E.g car.." v-model="newTagInput"/>
+          <button class="btn-default new-tag-form__button"  type="submit">Create</button>
+        </transition>
       </form>
     </div>
   </div>
