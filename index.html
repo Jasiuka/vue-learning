@@ -34,20 +34,27 @@
         </div>
       </div>
       <ul class="ul">
-        <li class="todo-item" v-for="(todo,index) in filteredTodos()" :key="index">
+        <li class="todo-item" v-for="(todo,index) in getFiveTodos(filteredTodos())" :key="index">
             <p>{{todo.text}}</p>
             <p class="todo-tag" v-bind:style="{backgroundColor: filterButtonColors[todo.tag.tagId]}">#{{todo.tag.tagText}}</p>
         </li>
       </ul>
+      <custom-pagination v-bind:changepage="changePage" v-bind:todos="todos"></custom-pagination>
     </div>
     <div class="todo-tags" v-else >
-      <button v-bind:class="{'create-new-open':isCreateTagOpen}" class="btn-default btn-create-new" v-on:click="openNewTagForm">Create new tag</button>
-      <transition name="slide">
-        <form  class="new-tag-form" v-on:submit.prevent="createTag" v-if="isNewTagOpen">
+      <button v-bind:class="{'create-new-open':isNewTagOpen}" class="btn-default btn-create-new" v-on:click="openNewTagForm">Create new tag</button>
+      <transition name="slide" >
+        <form  class="new-tag-form" v-on:submit.prevent="createTag" v-show="isNewTagOpen" >
           <input class="new-tag-form__input" id="new-tag" placeholder="E.g car.." v-model="newTagInput"/>
           <button class="btn-default new-tag-form__button"  type="submit">Create</button>
-        </transition>
-      </form>
+        </form>
+      </transition>
+      <div>
+        <h2>My tags</h2>
+        <ul class="todo-tags__list">
+          <li class="todo-tags__list-item" v-for="tag in tags">{{tag.tagText}} <button title="Delete" @click="deleteTag(tag.tagId)" class="tag-delete">&otimes;</button></li>
+        </ul>
+      </div>
     </div>
   </div>
 

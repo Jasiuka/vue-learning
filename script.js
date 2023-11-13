@@ -90,9 +90,12 @@ Vue.component("custom-select", {
       selected: { text: "Select tag", id: -1 },
       isOptionsOpen: false,
       isScrollNeeded: false,
+      animateIcon: false,
     };
   },
-  props: ["tags"],
+  props: {
+    tags: Array,
+  },
   methods: {
     selectTag: function (tagId, tagText) {
       this.selected = { id: tagId, text: tagText };
@@ -120,6 +123,32 @@ Vue.component("custom-select", {
       </div>`,
 });
 
+Vue.component("custom-pagination", {
+  data: function () {
+    return {
+      itemsPerPage: 5,
+    };
+  },
+  props: {
+    todos: Array,
+    changepage: Function,
+  },
+  methods: {
+    getPages: function (todos) {
+      const pagesCount = Math.ceil(todos.length / 5);
+      return Array.from({ length: pagesCount }, (_, index) => index + 1);
+    },
+  },
+  template: `
+  <div>
+    <p v-for="page in getPages(todos)">{{page}}</p>
+    <div class="pagination-buttons-box">
+      <button @click="changepage('prev')" class="pagination-button">&lt;</button>
+      <button @click="changepage('next')" class="pagination-button">&gt;</button>
+    </div>
+  </div>`,
+});
+
 const getTagIdFromTags = (tags, selected) => {
   return tags.find((tag) => {
     if (tag.tagText === selected) return tag.tagId;
@@ -129,10 +158,43 @@ const getTagIdFromTags = (tags, selected) => {
 const todo = new Vue({
   el: "#todo",
   data: {
-    todos: [],
+    view: "comp-A",
+    todos: [
+      {
+        text: "Text 1",
+        tag: { tagId: 0, tagText: "General" },
+        id: 1,
+      },
+      {
+        text: "Text 2",
+        tag: { tagId: 0, tagText: "General" },
+        id: 2,
+      },
+      {
+        text: "Text 3",
+        tag: { tagId: 0, tagText: "General" },
+        id: 3,
+      },
+      {
+        text: "Text 4",
+        tag: { tagId: 0, tagText: "General" },
+        id: 4,
+      },
+      {
+        text: "Text 5",
+        tag: { tagId: 0, tagText: "General" },
+        id: 5,
+      },
+      {
+        text: "Text 6",
+        tag: { tagId: 0, tagText: "General" },
+        id: 6,
+      },
+    ],
     tags: [
-      { tagId: 0, tagText: "FOOD" },
-      { tagId: 1, tagText: "GAMING" },
+      { tagId: 0, tagText: "General" },
+      { tagId: 1, tagText: "Food" },
+      { tagId: 2, tagText: "Work" },
     ],
     activeFilters: [],
     inputValue: "",
@@ -143,7 +205,7 @@ const todo = new Vue({
     styleObject: {},
     filterButtonColors: [],
     isHome: true,
-    isCreateTagOpen: false,
+    currentPage: 1,
   },
   created() {
     this.filterButtonColors = this.generateRandomColors();
@@ -224,7 +286,22 @@ const todo = new Vue({
       this.selected = selectedTag;
     },
     changeTab: function (value) {
+      if (!this.isHome) {
+        this.isNewTagOpen = false;
+      }
       this.isHome = value;
+    },
+    deleteTag: function (tagId) {
+      this.tags = this.tags.filter((tag) => tag.tagId !== tagId);
+    },
+    getFiveTodos: function (todos) {
+      const startIndex = this.currentPage * 5 - 5;
+      const endIndex = this.currentPage * 5;
+      return todos.splice(startIndex, endIndex);
+    },
+    changePage: function (value) {
+      if (value === "next") this.currentPage++;
+      if (value === "prev") this.currentPage--;
     },
   },
 });
