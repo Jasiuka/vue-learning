@@ -132,6 +132,7 @@ Vue.component("custom-pagination", {
   props: {
     todos: Array,
     changepage: Function,
+    currentpage: Number,
   },
   methods: {
     getPages: function (todos) {
@@ -140,8 +141,10 @@ Vue.component("custom-pagination", {
     },
   },
   template: `
-  <div>
-    <p v-for="page in getPages(todos)">{{page}}</p>
+  <div class="pagination">
+    <div>
+      <p class="pagination-item" v-bind:class="{'active-page': currentpage === page}" v-for="page in getPages(todos)">{{page}}</p>
+    </div>
     <div class="pagination-buttons-box">
       <button @click="changepage('prev')" class="pagination-button">&lt;</button>
       <button @click="changepage('next')" class="pagination-button">&gt;</button>
@@ -189,6 +192,16 @@ const todo = new Vue({
         text: "Text 6",
         tag: { tagId: 0, tagText: "General" },
         id: 6,
+      },
+      {
+        text: "Text 7",
+        tag: { tagId: 1, tagText: "Food" },
+        id: 7,
+      },
+      {
+        text: "Text 8",
+        tag: { tagId: 1, tagText: "Food" },
+        id: 8,
       },
     ],
     tags: [
@@ -300,8 +313,21 @@ const todo = new Vue({
       return todos.splice(startIndex, endIndex);
     },
     changePage: function (value) {
-      if (value === "next") this.currentPage++;
-      if (value === "prev") this.currentPage--;
+      const maxPages = Math.ceil(this.filteredTodos().length / 5);
+      if (value === "next") {
+        if (this.currentPage === maxPages) {
+          this.currentPage = 1;
+          return;
+        }
+        this.currentPage++;
+      }
+      if (value === "prev") {
+        if (this.currentPage === 1) {
+          this.currentPage = maxPages;
+          return;
+        }
+        this.currentPage--;
+      }
     },
   },
 });

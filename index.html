@@ -39,7 +39,7 @@
             <p class="todo-tag" v-bind:style="{backgroundColor: filterButtonColors[todo.tag.tagId]}">#{{todo.tag.tagText}}</p>
         </li>
       </ul>
-      <custom-pagination v-bind:changepage="changePage" v-bind:todos="todos"></custom-pagination>
+      <custom-pagination v-bind:currentPage="currentPage" v-bind:changepage="changePage" v-bind:todos="filteredTodos()"></custom-pagination>
     </div>
     <div class="todo-tags" v-else >
       <button v-bind:class="{'create-new-open':isNewTagOpen}" class="btn-default btn-create-new" v-on:click="openNewTagForm">Create new tag</button>

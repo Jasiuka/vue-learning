@@ -419,9 +419,29 @@ body {
 }
 
 /* PAGINATION */
+.pagination {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pagination div:first-of-type {
+  display: flex;
+  gap: 4px;
+}
+
 .pagination-buttons-box {
   display: flex;
   gap: 6px;
+}
+
+.pagination-item {
+  font-size: 20px;
+}
+
+.active-page {
+  font-weight: 600;
 }
 
 .pagination-button {
