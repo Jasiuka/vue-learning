@@ -560,6 +560,11 @@ body {
     min-width: 80dvw;
   }
 
+  .tag-delete {
+    opacity: 1;
+    visibility: visible;
+  }
+
   .message {
     left: 22%;
   }
