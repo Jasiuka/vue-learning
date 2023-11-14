@@ -146,16 +146,34 @@ Vue.component("custom-pagination", {
       <p class="pagination-item" v-bind:class="{'active-page': currentpage === page}" v-for="page in getPages(todos)">{{page}}</p>
     </div>
     <div class="pagination-buttons-box">
-      <button @click="changepage('prev')" class="pagination-button">&lt;</button>
-      <button @click="changepage('next')" class="pagination-button">&gt;</button>
+      <button title="Previous page" v-if="currentpage > 1" @click="changepage('prev')" class="pagination-button">&lt;</button>
+      <button title="Next page" v-if="currentpage !== getPages(todos).length " @click="changepage('next')" class="pagination-button">&gt;</button>
     </div>
   </div>`,
+});
+
+Vue.component("custom-message", {
+  data: function () {
+    return {};
+  },
+  props: {
+    messagetext: String,
+  },
+  template: `
+  <div class="message">
+    <p class="message-text">{{messagetext}}</p>
+  </div>
+  `,
 });
 
 const getTagIdFromTags = (tags, selected) => {
   return tags.find((tag) => {
     if (tag.tagText === selected) return tag.tagId;
   });
+};
+
+const checkIfTodosExistWithTag = (tagId, todos) => {
+  return todos.filter((todo) => todo.tag.tagId === tagId);
 };
 
 const todo = new Vue({
@@ -219,6 +237,8 @@ const todo = new Vue({
     filterButtonColors: [],
     isHome: true,
     currentPage: 1,
+    messageText: "Error",
+    isMessage: false,
   },
   created() {
     this.filterButtonColors = this.generateRandomColors();
@@ -306,7 +326,20 @@ const todo = new Vue({
       this.isHome = value;
     },
     deleteTag: function (tagId) {
+      if (checkIfTodosExistWithTag(tagId, this.todos).length) {
+        this.displayMessage(
+          "There are todo items associated with this tag. Delete them first!"
+        );
+        return;
+      }
       this.tags = this.tags.filter((tag) => tag.tagId !== tagId);
+    },
+    displayMessage: function (message) {
+      this.messageText = message;
+      this.isMessage = true;
+      setTimeout(() => {
+        this.isMessage = false;
+      }, 4000);
     },
     getFiveTodos: function (todos) {
       const startIndex = this.currentPage * 5 - 5;

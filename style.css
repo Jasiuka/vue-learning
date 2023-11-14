@@ -442,6 +442,7 @@ body {
 
 .active-page {
   font-weight: 600;
+  color: var(--light-green);
 }
 
 .pagination-button {
@@ -458,20 +459,51 @@ body {
   background-color: var(--light-green);
 }
 
+/* MESSAGE */
+
+.message {
+  position: absolute;
+  top: 5%;
+  left: calc(50% - 15rem);
+  background-color: var(--white);
+  color: var(--red);
+  border-radius: var(--border-radius);
+  padding: var(--pd-lg);
+  box-shadow: 0px 0px 13px -3px rgba(0, 0, 0, 0.1);
+  max-width: 30rem;
+}
+
+.message-text {
+  text-wrap: balance;
+  font-weight: 500;
+}
+
+.shake-enter-to {
+  animation: shakeMessage 0.5s;
+}
+
+.shake-leave-to {
+  animation: shakeMessage 0.5s reverse;
+}
+
+/* MESSAGE */
+
 /* PAGINATION */
 
 /* ANIMATIONS */
 @keyframes slideIn {
   40% {
-    transform: translateX(-100px);
+    margin-left: 0;
+    margin-right: 20px;
   }
 
   80% {
-    transform: translateX(10px);
+    margin-right: 0;
+    margin-left: 20px;
   }
 
   100% {
-    transform: translateX(0);
+    margin: 0;
   }
 }
 
@@ -499,6 +531,23 @@ body {
   60%,
   90% {
     border: 3px solid black;
+  }
+}
+
+@keyframes shakeMessage {
+  0%,
+  40%,
+  80% {
+    transform: translateX(-20px);
+  }
+
+  20%,
+  60% {
+    transform: translateX(20px);
+  }
+
+  100% {
+    transform: translateX(0);
   }
 }
 

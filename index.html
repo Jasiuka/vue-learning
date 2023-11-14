@@ -13,6 +13,9 @@
   </head>
   <body>
     <div id="todo">
+      <transition name="shake">
+        <custom-message v-show="isMessage" v-bind:messagetext="messageText"></custom-message>
+      </transition>
       <nav class="nav">
         <button v-bind:class="{'tab-button-active': isHome}" class="tab-button" @click="changeTab(true)">Home</button>
         <button v-bind:class="{'tab-button-active': !isHome}" class="tab-button"  @click="changeTab(false)">Tags</button>
