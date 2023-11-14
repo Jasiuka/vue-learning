@@ -141,13 +141,13 @@ Vue.component("custom-pagination", {
     },
   },
   template: `
-  <div class="pagination">
+  <div v-if="getPages(todos).length > 1" class="pagination">
     <div>
       <p class="pagination-item" v-bind:class="{'active-page': currentpage === page}" v-for="page in getPages(todos)">{{page}}</p>
     </div>
     <div class="pagination-buttons-box">
       <button title="Previous page" v-if="currentpage > 1" @click="changepage('prev')" class="pagination-button">&lt;</button>
-      <button title="Next page" v-if="currentpage !== getPages(todos).length " @click="changepage('next')" class="pagination-button">&gt;</button>
+      <button title="Next page" v-if="currentpage !== getPages(todos).length" @click="changepage('next')" class="pagination-button">&gt;</button>
     </div>
   </div>`,
 });
@@ -179,49 +179,7 @@ const checkIfTodosExistWithTag = (tagId, todos) => {
 const todo = new Vue({
   el: "#todo",
   data: {
-    view: "comp-A",
-    todos: [
-      {
-        text: "Text 1",
-        tag: { tagId: 0, tagText: "General" },
-        id: 1,
-      },
-      {
-        text: "Text 2",
-        tag: { tagId: 0, tagText: "General" },
-        id: 2,
-      },
-      {
-        text: "Text 3",
-        tag: { tagId: 0, tagText: "General" },
-        id: 3,
-      },
-      {
-        text: "Text 4",
-        tag: { tagId: 0, tagText: "General" },
-        id: 4,
-      },
-      {
-        text: "Text 5",
-        tag: { tagId: 0, tagText: "General" },
-        id: 5,
-      },
-      {
-        text: "Text 6",
-        tag: { tagId: 0, tagText: "General" },
-        id: 6,
-      },
-      {
-        text: "Text 7",
-        tag: { tagId: 1, tagText: "Food" },
-        id: 7,
-      },
-      {
-        text: "Text 8",
-        tag: { tagId: 1, tagText: "Food" },
-        id: 8,
-      },
-    ],
+    todos: [],
     tags: [
       { tagId: 0, tagText: "General" },
       { tagId: 1, tagText: "Food" },
@@ -241,31 +199,51 @@ const todo = new Vue({
     isMessage: false,
   },
   created() {
+    const localStorageTodos = JSON.parse(localStorage.getItem("todos"));
+    const localStorageTags = JSON.parse(localStorage.getItem("tags"));
+    if (localStorageTags) {
+      this.todos = localStorageTags;
+    }
+    if (localStorageTodos) {
+      this.todos = localStorageTodos;
+    }
     this.filterButtonColors = this.generateRandomColors();
   },
   methods: {
+    saveTodos: function () {
+      localStorage.setItem("todos", JSON.stringify(this.todos));
+    },
+    saveTags: function () {
+      localStorage.setItem("tags", JSON.stringify(this.tags));
+    },
     addTodo: function () {
       if (!this.selected) {
-        alert("Select tag!");
+        this.displayMessage("Select tag!");
         return;
       }
       if (this.inputValue < 4) {
-        alert("Todo should be longer!");
+        this.displayMessage("Todo should be longer!");
         return;
       }
 
       const todo = {
         text: this.inputValue,
         tag: { tagId: this.selected.tagId, tagText: this.selected.tagText },
-        id: this.todos.length,
+        id: this.todos.length + 1,
       };
 
       this.todos.push(todo);
       this.inputValue = "";
+      this.saveTodos();
+    },
+    completeTodo: function (todoId) {
+      const indexOfTodo = this.todos.findIndex((todo) => todo.id === todoId);
+      this.todos.splice(indexOfTodo, 1);
+      this.saveTodos();
     },
     createTag: function () {
       if (this.newTagInput.length < 3) {
-        alert("Tag should be longer!");
+        this.displayMessage("Tag should be longer!");
         return;
       }
       this.tags.push({
@@ -277,6 +255,7 @@ const todo = new Vue({
         this.generateRandomColor(),
       ];
       this.newTagInput = "";
+      this.saveTags();
     },
     openNewTagForm: function () {
       this.isNewTagOpen = !this.isNewTagOpen;
@@ -333,6 +312,7 @@ const todo = new Vue({
         return;
       }
       this.tags = this.tags.filter((tag) => tag.tagId !== tagId);
+      this.saveTags();
     },
     displayMessage: function (message) {
       this.messageText = message;

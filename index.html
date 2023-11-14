@@ -36,12 +36,13 @@
           <button class="filter-button" v-bind:class="{'filter-button-active': turnActive(tagId)}" v-on:click="activateFilterButton(tagId)" v-bind:style="{backgroundColor: filterButtonColors[tagId]}" :key="tagId" v-for="{tagId,tagText} in tags">#{{tagText}}</button>
         </div>
       </div>
-      <ul class="ul">
-        <li class="todo-item" v-for="(todo,index) in getFiveTodos(filteredTodos())" :key="index">
+        <transition-group name="todos" class="ul" tag="ul">
+          <li class="todo-item" v-for="(todo,index) in getFiveTodos(filteredTodos())" :key="(todo.id)">
+            <button @click="completeTodo(todo.id)" title="Complete todo" class="todo-complete btn-default">&or;</button>
             <p>{{todo.text}}</p>
             <p class="todo-tag" v-bind:style="{backgroundColor: filterButtonColors[todo.tag.tagId]}">#{{todo.tag.tagText}}</p>
-        </li>
-      </ul>
+          </li>
+        </transition-group>
       <custom-pagination v-bind:currentPage="currentPage" v-bind:changepage="changePage" v-bind:todos="filteredTodos()"></custom-pagination>
     </div>
     <div class="todo-tags" v-else >
