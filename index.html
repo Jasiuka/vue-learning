@@ -54,9 +54,9 @@
       </transition>
       <div>
         <h2>My tags</h2>
-        <ul class="todo-tags__list">
-          <li class="todo-tags__list-item" v-for="tag in tags">{{tag.tagText}} <button title="Delete" @click="deleteTag(tag.tagId)" class="tag-delete">&otimes;</button></li>
-        </ul>
+        <div class="todo-tags__list">
+          <div class="todo-tags__list-item" v-for="tag in tags">{{tag.tagText}} <button title="Delete" @click="deleteTag(tag.tagId)" class="tag-delete">&otimes;</button></div>
+        </div>
       </div>
     </div>
   </div>
