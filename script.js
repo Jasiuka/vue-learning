@@ -275,6 +275,7 @@ const todo = new Vue({
       return color;
     },
     activateFilterButton: function (buttonId) {
+      this.currentPage = 1;
       if (this.activeFilters.includes(buttonId)) {
         this.activeFilters = [
           ...this.activeFilters.filter(
