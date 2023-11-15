@@ -9,11 +9,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-    <title>Vue</title>
+    <title>Todo</title>
   </head>
   <body>
     <div id="todo">
-      <transition name="shake">
+      <transition name="message">
         <custom-message v-show="isMessage" v-bind:messagetext="messageText"></custom-message>
       </transition>
       <nav class="nav">
@@ -33,14 +33,14 @@
       <div v-if="todos.length > 0" class="filter">
         <h3>Filter by tag:</h3>
         <div>
-          <button class="filter-button" v-bind:class="{'filter-button-active': turnActive(tagId)}" v-on:click="activateFilterButton(tagId)" v-bind:style="{backgroundColor: filterButtonColors[tagId]}" :key="tagId" v-for="{tagId,tagText} in tags">#{{tagText}}</button>
+          <button class="filter-button" v-bind:class="{'filter-button-active': turnActive(tagId)}" v-on:click="activateFilterButton(tagId)" v-bind:style="{backgroundColor: filterButtonColors[tagId].backgroundColor, color:filterButtonColors[tagId].fontColor}" :key="tagId" v-for="{tagId,tagText} in tags">#{{tagText}}</button>
         </div>
       </div>
         <transition-group name="todos" class="ul" tag="ul">
           <li class="todo-item" v-for="(todo,index) in getFiveTodos(filteredTodos())" :key="(todo.id)">
             <button @click="completeTodo(todo.id)" title="Complete todo" class="todo-complete btn-default">&or;</button>
             <p>{{todo.text}}</p>
-            <p class="todo-tag" v-bind:style="{backgroundColor: filterButtonColors[todo.tag.tagId]}">#{{todo.tag.tagText}}</p>
+            <p class="todo-tag" v-bind:style="{backgroundColor: filterButtonColors[todo.tag.tagId].backgroundColor, color: filterButtonColors[todo.tag.tagId].fontColor}">#{{todo.tag.tagText}}</p>
           </li>
         </transition-group>
       <custom-pagination v-bind:currentPage="currentPage" v-bind:changepage="changePage" v-bind:todos="filteredTodos()"></custom-pagination>
@@ -61,20 +61,6 @@
       </div>
     </div>
   </div>
-
     </div>
-    <!-- <div id="app">
-      <h1>Accordion</h1>
-      <div class="item" v-for="(text,index) in items" :key="index">
-        <div class="wrapper">
-
-          <h3>
-            {{text.text}}
-          </h3>
-          <button v-on:click="toggle(index)">+</button>
-        </div>
-        <p class="subtext" v-bind:class="{active: currentOpen === index}">{{text.subtext}}</p>
-      </div>
-    </div> -->
   </body>
 </html>
